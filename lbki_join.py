@@ -104,3 +104,14 @@ def write_csv(data: List[Dict[str, str]], output_path: str, delimiter: str = ','
         writer = csv.DictWriter(f, fieldnames=fieldnames, delimiter=delimiter)
         writer.writeheader()
         writer.writerows(data)
+
+def read_csv_with_delimiters(
+    left_file: str,
+    right_file: str,
+    left_delimiter: Optional[str] = None,
+    right_delimiter: Optional[str] = None
+) -> Tuple[List[str], List[Dict[str, str]], List[str], List[Dict[str, str]]]:
+    """Читаем оба CSV с разными разделителями."""
+    left_headers, left_data = read_csv(left_file, left_delimiter)
+    right_headers, right_data = read_csv(right_file, right_delimiter)
+    return left_headers, left_data, right_headers, right_data

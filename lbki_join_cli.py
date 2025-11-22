@@ -11,18 +11,22 @@ def main():
     parser.add_argument('-k2', '--right-key', required=True, help='Колонка в правом файле для JOIN')
     parser.add_argument('-t', '--join-type', choices=['inner', 'left', 'right', 'outer'],
                         default='inner', help='Тип JOIN (по умолчанию: inner)')
-    parser.add_argument('-d', '--delimiter', choices=[',', ';', '\t'], help='Разделитель (если не указан — автоопределение)')
+    parser.add_argument('-d1', '--left-delimiter', choices=[',', ';', '\t'], help='Разделитель левого файла (если не указан — автоопределение)')
+    parser.add_argument('-d2', '--right-delimiter', choices=[',', ';', '\t'], help='Разделитель правого файла (если не указан — автоо��ределение)')
     parser.add_argument('-o', '--output', required=True, help='Выходной CSV файл')
 
     args = parser.parse_args()
 
-    delim = args.delimiter
-    if delim == '\t':
-        delim = '\t'  # корректная передача табуляции
+    left_delim = args.left_delimiter
+    right_delim = args.right_delimiter
+    if left_delim == '\t':
+        left_delim = '\t'
+    if right_delim == '\t':
+        right_delim = '\t'
 
     try:
-        left_headers, left_data = read_csv(args.left_file, delim)
-        right_headers, right_data = read_csv(args.right_file, delim)
+        left_headers, left_data = read_csv(args.left_file, left_delim)
+        right_headers, right_data = read_csv(args.right_file, right_delim)
 
         # Проверка наличия ключей
         if args.left_key not in left_headers:
@@ -31,10 +35,17 @@ def main():
             raise ValueError(f"Ключ '{args.right_key}' не найден в правом файле. Доступные: {right_headers}")
 
         result = join_data(left_data, right_data, args.left_key, args.right_key, args.join_type)
-        write_csv(result, args.output, delim or ',')
+        write_csv(result, args.output, left_delim or ',')
 
-        print(f"[✓] JOIN выполнен. Результат сохранён в: {args.output}")
-        print(f"    Строк в результате: {len(result)}")
+        print(f"\n[✓] JOIN выполнен успешно!")
+        print(f"{'─' * 50}")
+        print(f"Статистика:")
+        print(f"  Левый файл (LEFT):     {len(left_data)} строк")
+        print(f"  Правый файл (RIGHT):   {len(right_data)} строк")
+        print(f"{'─' * 50}")
+        print(f"  Результат ({args.join_type.upper()}):      {len(result)} строк")
+        print(f"{'─' * 50}")
+        print(f"Сохранено в: {args.output}\n")
 
     except Exception as e:
         print(f"[✕] Ошибка: {e}")
