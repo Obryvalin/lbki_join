@@ -29,7 +29,7 @@ class LBKIJoinApp:
 
         # Разделитель левого файла
         tk.Label(frame, text="Разделитель LEFT:").grid(row=1, column=0, sticky='w', pady=5)
-        self.left_delimiter_var = tk.StringVar(value=',')
+        self.left_delimiter_var = tk.StringVar(value=';')
         left_delim_frame = tk.Frame(frame)
         left_delim_frame.grid(row=1, column=1, sticky='w', pady=5)
         for d, label in [(',', 'Запятая'), (';', 'Точка с запятой'), ('\t', 'Табуляция')]:
@@ -43,7 +43,7 @@ class LBKIJoinApp:
 
         # Разделитель правого файла
         tk.Label(frame, text="Разделитель RIGHT:").grid(row=3, column=0, sticky='w', pady=5)
-        self.right_delimiter_var = tk.StringVar(value=',')
+        self.right_delimiter_var = tk.StringVar(value=';')
         right_delim_frame = tk.Frame(frame)
         right_delim_frame.grid(row=3, column=1, sticky='w', pady=5)
         for d, label in [(',', 'Запятая'), (';', 'Точка с запятой'), ('\t', 'Табуляция')]:
@@ -74,7 +74,7 @@ class LBKIJoinApp:
 
         # Разделитель результирующего файла
         tk.Label(frame, text="Разделитель OUTPUT:").grid(row=8, column=0, sticky='w', pady=5)
-        self.output_delimiter_var = tk.StringVar(value=',')
+        self.output_delimiter_var = tk.StringVar(value=';')
         output_delim_frame = tk.Frame(frame)
         output_delim_frame.grid(row=8, column=1, sticky='w', pady=5)
         for d, label in [(',', 'Запятая'), (';', 'Точка с запятой'), ('\t', 'Табуляция')]:

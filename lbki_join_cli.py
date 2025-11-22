@@ -1,8 +1,13 @@
 # cli.py
+    
 import argparse
 from lbki_join import read_csv, join_data, write_csv
 
 def main():
+    """
+    The main function defines a command-line interface for performing SQL-style JOIN operations on CSV
+    files and outputs the result to a specified CSV file.
+    """    
     parser = argparse.ArgumentParser(description="LBKI_JOIN: SQL-style JOIN для CSV файлов")
 
     parser.add_argument('left_file', help='Путь к левому CSV')
@@ -12,13 +17,16 @@ def main():
     parser.add_argument('-t', '--join-type', choices=['inner', 'left', 'right', 'outer'],
                         default='inner', help='Тип JOIN (по умолчанию: inner)')
     parser.add_argument('-d1', '--left-delimiter', choices=[',', ';', '\t'], help='Разделитель левого файла (если не указан — автоопределение)')
-    parser.add_argument('-d2', '--right-delimiter', choices=[',', ';', '\t'], help='Разделитель правого файла (если не указан — автоо��ределение)')
+    parser.add_argument('-d2', '--right-delimiter', choices=[',', ';', '\t'], help='Разделитель правого файла (если не указан — автоопределение)')
     parser.add_argument('-o', '--output', required=True, help='Выходной CSV файл')
+    parser.add_argument('-do', '--output-delimiter', choices=[',', ';', '\t'], help='Разделитель выходного файла (если не указан — автоопределение)')
+    
 
     args = parser.parse_args()
 
     left_delim = args.left_delimiter
     right_delim = args.right_delimiter
+    output_delim = args.output_delimiter
     if left_delim == '\t':
         left_delim = '\t'
     if right_delim == '\t':
@@ -35,7 +43,7 @@ def main():
             raise ValueError(f"Ключ '{args.right_key}' не найден в правом файле. Доступные: {right_headers}")
 
         result = join_data(left_data, right_data, args.left_key, args.right_key, args.join_type)
-        write_csv(result, args.output, left_delim or ',')
+        write_csv(result, args.output, output_delim or ';')
 
         print(f"\n[✓] JOIN выполнен успешно!")
         print(f"{'─' * 50}")
